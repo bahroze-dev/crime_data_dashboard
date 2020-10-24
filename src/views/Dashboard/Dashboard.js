@@ -109,7 +109,7 @@ export default function Dashboard(props) {
   };
 
   const handleSubmitSecnario2 = (event) => {
-    fetch('http://0.0.0.0:4000/predictSuspectType', {
+    fetch('http://34.96.255.76:4000/predictSuspectType', {
       method: 'POST', // or 'PUT'
       headers: {
         'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ export default function Dashboard(props) {
     setValue(newValue);
   };
   const handleClickOpen = () => {
-    fetch('http://0.0.0.0:4000/get_scenario2_data', {
+    fetch('http://34.96.255.76:4000/get_scenario2_data', {
       method: 'GET', // or 'PUT'
       headers: {
         'Content-Type': 'application/json',
