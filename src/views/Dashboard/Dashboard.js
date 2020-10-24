@@ -185,7 +185,58 @@ export default function Dashboard(props) {
                 </div>
                 <div>
                   <TabPanel value={value} index={0}>
-                    Item One
+
+
+                    <Typography variant="h5" style={{ textAlign: "center", color: "#616161", marginBottom: "10px" }} >
+                      Instructions
+                    </Typography>
+                    <DialogContentText>
+                      <p>
+                        <span style={{fontWeight:"bold"}}>1.</span> Click on the Predict button shown below. It will launch a dialog.
+                        
+                      </p>
+                      <p>
+                        <span style={{fontWeight:"bold"}}>2.</span> Provide the input fields and click on submit. After that you will redirected
+                        to the predicted tab
+                      </p>
+                      <p>
+                        <span style={{fontWeight:"bold"}}>Note:</span> You can move around the tabs to view the 
+                        <span style={{fontWeight:"bold"}}> Dataset tab</span> and <span style={{fontWeight:"bold"}}>Predicted tab</span> to view
+                        all the values that were predicted in past. The values are arranged in Descending Order.
+                      </p>
+                      
+                     
+                    </DialogContentText>
+                    <Typography variant="h5" style={{ textAlign: "center", color: "#616161", marginBottom: "10px" }} >
+                      Details
+                    </Typography>
+                    <DialogContentText>
+                      This application currently predicts the the race of person (white, black, asian etc) and age of person.
+                      This uses simple classification model and regression model, where we provide input <span style={{fontWeight:"bold"}}>
+                        Crime Type, Gender, Location of crime.
+                      </span>
+                      <p>
+                        The classification model uses the following features from dataset. 
+                      
+                      </p>
+                      <p>
+                      <span style={{fontWeight:"bold"}}>
+                         (Local Area),	(Offense),	(Gender),	(Year),	(Month),	(Day),	(Hours),	(Minutes),  (Seconds)
+                      </span>
+                      </p> 
+                      <p>
+                        While the regression model uses the following features from dataset 
+                      
+                      </p>
+                      <p>
+                        
+                        <span style={{fontWeight:"bold"}}>
+                          (Local Area),	(Offense),	(Perpetrator Race),	(Gender),	(Year),	(Month),	(Day),	(Hours), (Minutes), (Seconds)
+
+                        </span>
+                      </p>
+                      
+                    </DialogContentText>
                 </TabPanel>
                   <TabPanel value={value} index={1}>
 
