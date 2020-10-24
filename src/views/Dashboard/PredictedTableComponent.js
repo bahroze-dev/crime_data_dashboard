@@ -71,7 +71,7 @@ export default function DatasetTableComponent() {
     // Update the document title using the browser API
     
 
-    fetch('http://localhost:5000/get_scenario2_predicted', {
+    fetch('http://0.0.0.0:4000/get_scenario2_predicted', {
       method: 'GET', // or 'PUT'
       headers: {
         'Content-Type': 'application/json',
