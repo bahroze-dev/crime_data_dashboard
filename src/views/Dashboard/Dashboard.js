@@ -2,285 +2,312 @@ import React from "react";
 // react plugin for creating charts
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from 'prop-types';
 // @material-ui/icons
-import {Store,ShoppingCart,Category,DateRange,Update} from "@material-ui/icons";
-
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime";
-import Accessibility from "@material-ui/icons/Accessibility";
 
 // core components
-import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardIcon from "components/Card/CardIcon.js";
-import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
-import { Slide, Fade } from "@material-ui/core";
+import { Slide, Fade, Paper, Typography, Tabs, Tab, Fab, MenuItem } from "@material-ui/core";
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+import AddIcon from '@material-ui/icons/Add';
+
 // import { useSelector } from "react-redux";
+import Box from '@material-ui/core/Box';
+
+import DatasetTableComponent from "./DatasetTableComponent.js";
+import PredictedTableComponent from "./PredictedTableComponent.js";
 
 
 
-import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
-import LineChartWithFill from "components/MyCharts/LineChartWithFill.js";
-import BarChart from "components/MyCharts/BarChart";
-import BarChartWithShapes from "components/MyCharts/BarChartWithShapes";
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
-const useStyles = makeStyles(styles);
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(1),
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
+  },
+}));
+
 
 export default function Dashboard(props) {
- 
+
   // const pageAnimation = useSelector(state => state.pageAnimation);
   const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+
+
+  const [open, setOpen] = React.useState(false);
+
+
+
+  
+
+  const [allOffenses,setAllOffenses] = React.useState([])
+  const [allLocalArea,setAllLocalArea] = React.useState([])
+  const [allGender,setAllGenders] = React.useState([])
+  
+  const [offense, setOffense] = React.useState(allOffenses[0]);
+  const [localArea, setLocalArea] = React.useState(allLocalArea[0]);
+  const [gender, setGender] = React.useState(allGender[0]);
+  
+
+
+  const handleChangeSelectOffense = (event) => {
+    setOffense(event.target.value);
+  };
+  const handleChangeSelectLocalArea = (event) => {
+    setLocalArea(event.target.value);
+  };
+  const handleChangeSelectGender = (event) => {
+    setGender(event.target.value);
+  };
+
+  const handleSubmitSecnario2 = (event) => {
+    fetch('http://localhost:5000/predictSuspectType', {
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json',
+        },
+      body:JSON.stringify({crimeType:offense,location:localArea,gender:gender})
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+    });
+
+    setValue(2);
+
+
+    setOpen(false);
+  }
+  
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const handleClickOpen = () => {
+    fetch('http://localhost:5000/get_scenario2_data', {
+      method: 'GET', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json',
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        setAllOffenses(data.all_offenses)
+        setAllLocalArea(data.all_Local_Area)
+        setAllGenders(data.all_genders)
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+    });
+    setOpen(true);
+
+  };
+
+  React.useEffect(() => {
+    // Update the document title using the browser API
+
+    return () => {
+      
+    };
+  });
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  console.log(allGender)
+ 
   return (
     <div>
       <Fade in={true} timeout={1200}>
         <div>
           <Slide in={true} direction={"up"} timeout={400}>
             <div>
-              <GridContainer>
-            
-                <GridItem xs={12} sm={6} md={3}>
-                  <Card>
-                    <CardHeader color="info" stats icon>
-                      <CardIcon color="info">
-                        <ShoppingCart />
-                      </CardIcon>
-                      <p className={classes.cardCategory}>Products</p>
-                      <h3 className={classes.cardTitle}>
-                        400
-                      </h3>
-                    </CardHeader>
-                    <CardFooter stats>
-                      <div className={classes.stats}>
-                        <DateRange />
-                        Last 24 Hours
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </GridItem>
-                <GridItem xs={12} sm={6} md={3}>
-                  <Card>
-                    <CardHeader color="success" stats icon>
-                      <CardIcon color="success">
-                        <Category />
-                      </CardIcon>
-                      <p className={classes.cardCategory}>Categories</p>
-                      <h3 className={classes.cardTitle}>10</h3>
-                    </CardHeader>
-                    <CardFooter stats>
-                      <div className={classes.stats}>
-                        <DateRange />
-                        Last 24 Hours
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </GridItem>
-                <GridItem xs={12} sm={6} md={3}>
-                  <Card>
-                    <CardHeader color="danger" stats icon>
-                      <CardIcon color="danger">
-                        <Store />
-                      </CardIcon>
-                      <p className={classes.cardCategory}>Manufacturers</p>
-                      <h3 className={classes.cardTitle}>75</h3>
-                    </CardHeader>
-                    <CardFooter stats>
-                      <div className={classes.stats}>
-                        <DateRange />
-                        Last 24 Hours
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </GridItem>
-                <GridItem xs={12} sm={6} md={3}>
-                  <Card>
-                    <CardHeader color="rose" stats icon>
-                      <CardIcon color="rose">
-                        <Accessibility />
-                      </CardIcon>
-                      <p className={classes.cardCategory}>Recommendations</p>
-                      <h3 className={classes.cardTitle}>+245</h3>
-                    </CardHeader>
-                    <CardFooter stats>
-                      <div className={classes.stats}>
-                        <Update />
-                        Just Updated
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={4}>
-                  <Card chart>
-                    <CardHeader color="info" >
-                      <LineChartWithFill 
-                        chartData={[12, 17, 7, 17, 23, 18, 38]}
-                        labels= {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
-                        title="Products Viewed"
-                        options={{
-                          minVal:0,
-                          maxVal:40,
-                          stepSize:10,
-                        }}
-                      />
-                    </CardHeader>
-                    <CardBody>
-                      <h4 className={classes.cardTitle}>Daily Products Viewed</h4>
-                      <p className={classes.cardCategory}>
-                        <span className={classes.successText}>
-                          <ArrowUpward
-                            className={classes.upArrowCardCategory}
-                          />{" "}
-                              55%
-                        </span>{" "}
-                          increased views.
-                      </p>
-                    </CardBody>
-                    <CardFooter chart>
-                      <div className={classes.stats}>
-                        <AccessTime /> updated 4 minutes ago
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <Card chart>
-                    <CardHeader color="danger" >
-                      {/* <ProductsAddedChart /> */}
-                      <BarChart 
-                        labels= {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul','Aug','Sep','Oct','Nov','Dec']}
-                        label= 'Added Products'
-                        chartData= {[65, 59, 80, 81, 56, 55, 40, 100, 55, 20, 75, 30]}
-                      />
-                    </CardHeader>
-                    <CardBody>
-                      <h4 className={classes.cardTitle}>Recommendation over time</h4>
-                      <p className={classes.cardCategory}>
-                        Monthly Recommendation done 
-                      </p>
-                    </CardBody>
-                    <CardFooter chart>
-                      <div className={classes.stats}>
-                        <AccessTime /> Updated 2 days ago
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <Card chart>
-                    <CardHeader color="rose">
-                      {/* <ProductsPopularChart /> */}
-                      <BarChartWithShapes 
-                        labels={['Jan', 'Feb', 'Mar']}
-                        titles={['Shirt','Shoes']}
-                        chartData = {[[20, 100, 56],[65, 59, 80]]}
-                      />
-                    </CardHeader>
-                    <CardBody>
-                      <h4 className={classes.cardTitle}>Popular Categories</h4>
-                      <p className={classes.cardCategory}>
-                        Displaying popular categories 
-                      </p>
-                    </CardBody>
-                    <CardFooter chart>
-                      <div className={classes.stats}>
-                        <AccessTime /> Updated 2 days ago.
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={4}>
-                  <Card chart>
+              <Paper elevation={10} square={false} style={{ padding: "10px 30px 30px 30px", borderRadius: 20 }}>
+                <div>
+               
+                  <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+                    <Tab label="Instructions & Details" {...a11yProps(0)} />
+                    <Tab label="Dataset" {...a11yProps(1)} />
+                    <Tab label="Predicted" {...a11yProps(2)} />
+                  </Tabs>
+                </div>
+                <div>
+                  <TabPanel value={value} index={0}>
+                    Item One
+                </TabPanel>
+                  <TabPanel value={value} index={1}>
 
-                    <CardHeader color="success" >
-                      {/* <ProductsAddedChart /> */}
-                      <BarChart 
-                        labels= {['Rado', 'Khaadi', 'Lime', 'D&Q', "Levi's", 'JJ', 'Polo','North','Cate','Timber','Puma','Nike']}
-                        label= 'Manufacturers'
-                        chartData= {[5, 88, 60, 25, 84, 97, 33, 13, 21, 29, 47, 72]}
-                      />
-                    </CardHeader>
-                    <CardBody>
-                      <h4 className={classes.cardTitle}>Manufacturers comparison</h4>
-                      <p className={classes.cardCategory}>
-                        Values of Manufacturers
-                      </p>
-                    </CardBody>
-                    <CardFooter chart>
-                      <div className={classes.stats}>
-                        <AccessTime /> updated 4 minutes ago
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <Card chart>
-                  <CardHeader color="warning" >
-                      <LineChartWithFill 
-                        chartData={[5, 88 , 50, 44, 78, 95, 65]}
-                        labels= {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
-                        title="Visits"
-                        options={{
-                          minVal:0,
-                          maxVal:100,
-                          stepSize:20,
-                        }}
-                      />
-                      
-                    </CardHeader>
-                    <CardBody>
-                      <h4 className={classes.cardTitle}>Website Views</h4>
-                      <p className={classes.cardCategory}>
-                        Daily website visitors
-                      </p>
-                    </CardBody>
-                    <CardFooter chart>
-                      <div className={classes.stats}>
-                        <AccessTime /> Updated today
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <Card chart>
-                    <CardHeader color="primary">
-                      {/* <ProductsPopularChart /> */}
-                      <LineChartWithFill 
-                        chartData={[78, 50, 40, 11, 68, 25, 5, 12, 35, 57, 20, 9]}
-                        labels= {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul','Aug','Sep','Oct','Nov','Dec']}
-                        title="Visits"
-                        options={{
-                          minVal:0,
-                          maxVal:100,
-                          stepSize:20,
-                        }}
-                      />
-                      
-                    </CardHeader>
-                    <CardBody>
-                      <h4 className={classes.cardTitle}>Bugs</h4>
-                      <p className={classes.cardCategory}>
-                         Month wise Bugs comparison
-                      </p>
-                    </CardBody>
-                    <CardFooter chart>
-                      <div className={classes.stats}>
-                        <AccessTime /> Updated 2 days ago.
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </GridItem>
-              </GridContainer>
+                    <div>
+                      <Typography variant="h5" style={{ textAlign: "center", color: "#616161", marginBottom: "10px" }} >
+                        Dataset
+                      </Typography>
+                    </div>
+                    <div>
+                      <DatasetTableComponent />
+                    </div>
 
+                  </TabPanel>
+                  <TabPanel value={value} index={2}>
+                    <DialogContentText>
+                      <span style={{fontWeight:"bold"}}>Scenario:</span><p>Given crime type, crime location and gender. List down the type of 
+                        race of person and age that could've commited that crime. The model takes three inputs and returns race and age of type
+                        of suspects
+                      </p>
+                      <span style={{fontWeight:"bold"}}>Note: Order is from latest to old ones.</span>
+                    </DialogContentText>
+                    <Typography variant="h5" style={{ textAlign: "center", color: "#616161", marginBottom: "10px" }} >
+                      Predicted Values
+                    </Typography>
+
+                    <div>
+                      <PredictedTableComponent />
+                    </div>
+
+                  </TabPanel>
+                  <Fab variant="extended" color="secondary" aria-label="add"
+                    onClick={handleClickOpen} 
+                    className={classes.margin}
+                    style={{
+                      margin: 0,
+                      top: 'auto',
+                      right: 25,
+                      bottom: 30,
+                      left: 'auto',
+                      position: 'fixed',
+                      zIndex:1000,
+                      }}
+                    >
+                      <AddIcon className={classes.extendedIcon} />
+                        Predict
+                  </Fab>
+
+                </div>
+
+              </Paper>
+              <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Predict</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Please specify the offense type, location and gender. These are the input parameters for the Machine learning Modal.
+                    It will return predicted race of person and age. After submitting you will be redirected to Predicted Tab
+                  </DialogContentText>
+                  <form className={classes.root} noValidate autoComplete="off">
+                    <div>
+                      <TextField
+                        id="outlined-select-offense"
+                        select
+                        label="Offense Type"
+                        value={offense}
+                        onChange={handleChangeSelectOffense}
+                        helperText="Please select Offense Type"
+                        variant="outlined"
+                      >
+                        {allOffenses.map((option,i) => (
+                          <MenuItem key={i} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                      <TextField
+                        id="outlined-select-location"
+                        select
+                        label="Local Area"
+                        value={localArea}
+                        onChange={handleChangeSelectLocalArea}
+                        helperText="Please select Local Area"
+                        variant="outlined"
+                      >
+                        {allLocalArea.map((option,i) => (
+                          <MenuItem key={i} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                      <TextField
+                        id="outlined-select-gender"
+                        select
+                        label="Gender"
+                        value={gender}
+                        onChange={handleChangeSelectGender}
+                        helperText="Please select Gender Type"
+                        variant="outlined"
+                      >
+                        {allGender.map((option,i) => (
+                          <MenuItem key={i} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </div>
+                  </form>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} size="large" color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={handleSubmitSecnario2} size="large" color="primary">
+                    Submit
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </div>
+
           </Slide>
         </div>
       </Fade>
     </div>
   );
 }
+

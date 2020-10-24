@@ -8,7 +8,7 @@ import store from "./redux/store.js"
 import Admin from "layouts/Admin.js";
 
 import "assets/css/material-dashboard-react.css?v=1.9.0";
-import Home from "./layouts/Home.js";
+// import Home from "./layouts/Home.js";
 
 const hist = createBrowserHistory();
 
@@ -19,8 +19,8 @@ ReactDOM.render(
         <Route path="/admin" component={Admin} />
         {/* <Redirect from="/" to="/admin/dashboard" /> */}
 
-        <Route path="/home" component={Home} />
-        <Redirect from="/" to="/home" />
+        {/* <Route path="/home" component={Home} /> */}
+        <Redirect from="/" to="/admin" />
       </Switch>
     </Router>
   </Provider>,
