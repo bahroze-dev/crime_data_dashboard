@@ -77,7 +77,7 @@ export default function DatasetTableComponent() {
     // Update the document title using the browser API
     
 
-    fetch('http://0.0.0.0:4000/getData', {
+    fetch('http://34.96.255.76:4000/getData', {
       method: 'GET', // or 'PUT'
       headers: {
         'Content-Type': 'application/json',
