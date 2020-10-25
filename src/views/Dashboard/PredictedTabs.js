@@ -100,11 +100,7 @@ export default function PredictedTabs(props) {
     };
     React.useEffect(() => {
         // Update the document title using the browser API
-        if(value===props.predictedTab){
-            window.location.reload();
-        }else{
-            setValue(props.predictedTab)
-        }
+        setValue(props.predictedTab)
         return () => {
           
         };
