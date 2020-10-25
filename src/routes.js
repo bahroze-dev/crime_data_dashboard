@@ -30,7 +30,7 @@ import {
 const dashboardRoutes = [
   {
     path: "/dashboard",
-    name: "Crime Machine Learning",
+    name: "AI Inspector",
     icon: Dashboard,
     secondaryIcon: DashboardOutlined,
     component: DashboardPage,
