@@ -114,7 +114,7 @@ export default function DialogBoxTabs(props) {
 
     React.useEffect(() => {
         // Update the document title using the browser API
-        fetch('http://0.0.0.0:4000/get_scenarios_data', {
+        fetch('http://34.96.196.4:4000/get_scenarios_data', {
             method: 'GET', // or 'PUT'
             headers: {
               'Content-Type': 'application/json',
@@ -136,7 +136,7 @@ export default function DialogBoxTabs(props) {
 
     
   const handleSubmitSecnario2 = (event) => {
-    fetch('http://0.0.0.0:4000/predictSuspectType', {
+    fetch('http://34.96.196.4:4000/predictSuspectType', {
       method: 'POST', // or 'PUT'
       headers: {
         'Content-Type': 'application/json',
@@ -159,7 +159,7 @@ export default function DialogBoxTabs(props) {
   }
 
   const handleSubmitSecnarioOne = (event) => {
-    fetch('http://0.0.0.0:4000/recommendsSuspectList', {
+    fetch('http://34.96.196.4:4000/recommendsSuspectList', {
       method: 'POST', // or 'PUT'
       headers: {
         'Content-Type': 'application/json',

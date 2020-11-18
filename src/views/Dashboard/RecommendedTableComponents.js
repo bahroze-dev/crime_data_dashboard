@@ -48,7 +48,7 @@ export default function RecommendedTableComponents() {
     // Update the document title using the browser API
     
 
-    fetch('http://0.0.0.0:4000/get_recommended_suspects', {
+    fetch('http://34.96.196.4:4000/get_recommended_suspects', {
       method: 'GET', // or 'PUT'
       headers: {
         'Content-Type': 'application/json',
